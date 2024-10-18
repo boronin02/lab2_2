@@ -5,33 +5,36 @@
 
 // 1. Структура для представления пользователя
 struct User {
-    char username[50];  // Имя пользователя
-    char password[50];  // Пароль
-    double balance;     // Баланс
+    int id;                   // ID пользователя
+    char name[50];            // Имя пользователя
+    char username[50];        // Логин
+    char password[50];        // Пароль
+    char accountCreationDate[20]; // Дата создания аккаунта
+    double balance;           // Баланс
 };
 
 // 2. Структура для представления игры казино
 struct Game {
-    char gameName[50];      // Название игры
-    double minBet;          // Минимальная ставка
-    double maxBet;          // Максимальная ставка
-    double payoutMultiplier; // Множитель выигрыша
+    char gameName[50];        // Название игры
+    double minBet;            // Минимальная ставка
+    double maxBet;            // Максимальная ставка
+    double payoutMultiplier;  // Множитель выигрыша
 };
 
 // 3. Структура для представления транзакции
 struct Transaction {
-    char username[50];      // Имя пользователя
-    char transactionType[20]; // Тип транзакции (например, "депозит" или "ставка")
-    double amount;          // Сумма транзакции
-    char date[20];          // Дата транзакции
+    int id;                   // ID транзакции
+    int userId;               // ID пользователя
+    double amount;            // Сумма транзакции
+    char timestamp[20];       // Время транзакции
 };
 
 // 4. Структура для представления игрового раунда
 struct GameRound {
-    struct User* player;    // Игрок
-    struct Game* game;      // Игра
-    double betAmount;       // Сумма ставки
-    int result;             // 0 - проигрыш, 1 - выигрыш
+    struct User* player;      // Игрок
+    struct Game* game;        // Игра
+    double betAmount;         // Сумма ставки
+    int result;               // 0 - проигрыш, 1 - выигрыш
 };
 
 // 5. Структура для представления лобби игры
@@ -66,7 +69,10 @@ struct BetHistory {
 
 // Функция для отображения информации о пользователе
 void displayUserInfo(struct User* user) {
-    printf("Имя пользователя: %s\n", user->username);
+    printf("ID пользователя: %d\n", user->id);
+    printf("Имя пользователя: %s\n", user->name);
+    printf("Логин: %s\n", user->username);
+    printf("Дата создания аккаунта: %s\n", user->accountCreationDate);
     printf("Баланс: %.2f рублей\n", user->balance); printf("\n");
 }
 
@@ -80,10 +86,10 @@ void displayGameInfo(struct Game* game) {
 
 // Функция для отображения транзакции
 void displayTransactionInfo(struct Transaction* transaction) {
-    printf("Пользователь: %s\n", transaction->username);
-    printf("Тип транзакции: %s\n", transaction->transactionType);
-    printf("Сумма: %.2f рублей\n", transaction->amount);
-    printf("Дата: %s\n", transaction->date); printf("\n");
+    printf("ID транзакции: %d\n", transaction->id);
+    printf("ID пользователя: %d\n", transaction->userId);
+    printf("Сумма транзакции: %.2f рублей\n", transaction->amount);
+    printf("Время транзакции: %s\n", transaction->timestamp); printf("\n");
 }
 
 // Функция для отображения результата игрового раунда
@@ -132,9 +138,9 @@ void displayBonusInfo(struct Bonus* bonus) {
 int main() {
     setlocale(2, "rus");
     // Пример данных для тестирования
-    struct User user = { "Игрок1", "password123", 100.0 };
+    struct User user = { 1, "Иван Иванов", "ivanov", "password123", "2024-10-01", 100.0 };
     struct Game game = { "Однорукий бандит", 5.0, 100.0, 2.5 };
-    struct Transaction transaction = { "Игрок1", "Депозит", 50.0, "2024-10-18" };
+    struct Transaction transaction = { 101, 1, 50.0, "2024-10-18 15:30" };
     struct GameRound round = { &user, &game, 10.0, 1 };
     struct Jackpot jackpot = { 5000.0, 0 };
     struct Bonus bonus = { "Фриспины", 20.0, 1 };
